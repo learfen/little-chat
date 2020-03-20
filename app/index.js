@@ -19,7 +19,12 @@ const server = http.createServer((req, res) => {
 });
 
 var io = require('socket.io')(server);
-var sessionList = {}
+var sessionList = (v)=>{
+    if(v){
+        fs.writeFileSync("app/users.json", JSON.stringify(v))
+    }
+    return JSON.parse(fs.readFileSync("app/users.json"))
+}
 
 server.listen(env.port, env.host, () => {
     console.log({ env })
@@ -52,28 +57,30 @@ io.on('connection', function(socket){
 
 });
 
-
 class User{
     static sessionListAdd(user, id){
-        sessionList[user] = id
+        let temp = sessionList()
+        temp[user] = id
+        sessionList(temp)
     }
     static sessionListRemove(id){
         for(let a in sessionList){
-            if(sessionList[a] == id){
-                delete sessionList[a]
+            if(sessionList()[a] == id){
+                delete sessionList()[a]
                 break
             }
         }
     }
     static valid(user){
-        return !sessionList.hasOwnProperty(user)
+
+        return !sessionList().hasOwnProperty(user)
     }
     static login(user){
         io.emit(user, JSON.stringify({action:"online", user}));
         User.sessionList(user)
     }
     static sessionList(){
-        let send = {users:Object.keys(sessionList)}
+        let send = {users:Object.keys(sessionList())}
         io.emit("users", JSON.stringify(send) )
     }
 }
