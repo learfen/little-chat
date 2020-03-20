@@ -1,18 +1,21 @@
 <h1>Hola mundo</h1>
-<div>
+<div else="login">
     <input id="user">
     <button id="login">iniciar sesion </button>
 </div>
-<div><div id="user-online"></div><span id="user-name"></span></div>
-<div>
+<div style="display:flex"><div if="login" style="width:1rem;height:1rem;background-color:#3c3;border-radius:50%"></div><span if="login" html="user"></span></div>
+<div style="display: flex; flex-direction: column;max-width:580px;margin:1rem auto;">
     <b>Online</b>
-    <ul id="users"></ul>
+    <select id="users"></select>
+    <textarea rows="6" id="messagge"></textarea>
+    <button>Enviar</button>
 </div>
 
 <script src="/socket.io/socket.io.js"></script>
+<script src="/static/dom.js"></script>
 <script>
 
-    (function ($s) {
+    (function ($s , Nodo , state) {
         $d = document
         let chat = null
         const socket = {
@@ -34,39 +37,12 @@
 
 
 
-
-        class Nodo{
-            static get(q,v){
-                let n = document.querySelector(q)
-                if(v){
-                    let nodeName = n.nodeName.toLowerCase()
-                    if(nodeName == 'input' || nodeName == 'textarea' || nodeName == 'select'){
-                        n.value = v
-                    }else{
-                        n.innerHTML = v
-                    }
-                } 
-                return n
-            }
-            static getList(q){ return document.querySelector(q) }
-            static push(name, html, pushIn){
-                let nodo = $d.createElement(name)
-                if(pushIn){
-                    pushIn = typeof pushIn == "string" ? Nodo.get(pushIn) : pushIn
-                    pushIn.appendChild(nodo)
-                }
-                if(html){
-                    nodo.innerHTML = html
-                }
-                return nodo
-            }
-        }
-
         class Chat{
             static launch(user){
                 $s.on(user, Chat.listener);
                 $s.on("users", Chat.users);
                 localStorage.setItem("user" , user)
+                state.data.user = user
             }
             static listener(msgText){
                 let msg = JSON.parse(msgText)
@@ -75,33 +51,37 @@
                 }
             }
             static online(msg){
-                Nodo.get("#user-name", msg.user)
-                Nodo.get('#user-online').style = "width:1rem;height:1rem;background-color:#3c3;border-radius:50%"
+                state.set("user",msg.user)
+                state.set("login",true)
             }
             static users(msgText){
                 let msg = JSON.parse(msgText)
                 let users = Nodo.get("#users")
                 users.innerHTML = ""
+                msg.users.splice( state.data.user, 1)
+                console.log({user: state.data.user , msg , users:msg.users})
                 if(msg.users.length){
                     for(let user of msg.users){
-                        Nodo.push("li", user, users)
+                        Nodo.push("option", user, users)
                     }
                 }
             }
         }
         
+        
+        state.instanceDom()
+        
 
         // revisamos si inicio sesion
         let temp = localStorage.getItem("user")
-        console.log(temp)
         if(temp != ""){
             Nodo.get("#user", temp)
-            socket.login()   
+            socket.login()
         }
 
         Nodo.get("#login").addEventListener("click", socket.login );
                 
-    })(io());
+    })(io() , Nodo , state);
 
 
 </script>

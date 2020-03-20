@@ -9,6 +9,13 @@ const server = http.createServer((req, res) => {
         res.setHeader('Content-Type', 'text/html');
         res.end(fs.readFileSync(env.init))
     }
+    if(req.url.search("/static/")>-1){
+        let url = req.url.replace("/static/","")
+        if(url.search('.js')>-1){
+            res.setHeader('Content-Type', 'text/javascript');
+            res.end(fs.readFileSync("app/public/assets/js/"+url))
+        }
+    }
 });
 
 var io = require('socket.io')(server);
@@ -65,9 +72,8 @@ class User{
         io.emit(user, JSON.stringify({action:"online", user}));
         User.sessionList(user)
     }
-    static sessionList(user){
+    static sessionList(){
         let send = {users:Object.keys(sessionList)}
-        send.users.splice(user , 1)
         io.emit("users", JSON.stringify(send) )
     }
 }
