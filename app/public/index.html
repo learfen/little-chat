@@ -21,8 +21,11 @@
         const socket = {
             login(){
                 let user = Nodo.get("#user").value
-                $s.emit('chat message', JSON.stringify({login:user}));
+                if(state.data.login == false){
+                    $s.emit('chat message', JSON.stringify({login:user}));
+                }
                 Chat.launch(user)
+                $s.emit('users-list', "");
             },
             error(){
                 $s.on("errorTo" , msg => {
@@ -39,10 +42,12 @@
 
         class Chat{
             static launch(user){
-                $s.on(user, Chat.listener);
+                if(state.data.login == false){
+                    $s.on(user, Chat.listener);
+                    localStorage.setItem("user" , user)
+                    state.set("user", user)
+                }
                 $s.on("users", Chat.users);
-                localStorage.setItem("user" , user)
-                state.data.user = user
             }
             static listener(msgText){
                 let msg = JSON.parse(msgText)
@@ -51,15 +56,13 @@
                 }
             }
             static online(msg){
-                state.set("user",msg.user)
-                state.set("login",true)
+                console.log("online : " , msg)
             }
             static users(msgText){
                 let msg = JSON.parse(msgText)
                 let users = Nodo.get("#users")
                 users.innerHTML = ""
-                msg.users.splice( state.data.user, 1)
-                console.log({user: state.data.user , msg , users:msg.users})
+                msg.users.splice( msg.users.indexOf(state.data.user), 1)
                 if(msg.users.length){
                     for(let user of msg.users){
                         Nodo.push("option", user, users)
@@ -74,8 +77,10 @@
 
         // revisamos si inicio sesion
         let temp = localStorage.getItem("user")
-        if(temp != ""){
+        if(temp != null){
             Nodo.get("#user", temp)
+            state.set("user", temp)
+            state.set("login",true)
             socket.login()
         }
 

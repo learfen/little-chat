@@ -1,26 +1,20 @@
 const http = require('http');
+const routesViews = require('./routes/views.js');
+const routesStatic = require('./routes/static.js');
 const fs = require('fs')
+fs.writeFileSync("app/users.json" , "{}")
 const mode = "dev"
 const env = JSON.parse(fs.readFileSync("app/env.json"))[mode]
 
 const server = http.createServer((req, res) => {
     res.statusCode = 200;
-    if(req.url == "/chat"){
-        res.setHeader('Content-Type', 'text/html');
-        res.end(fs.readFileSync(env.init))
-    }
-    if(req.url.search("/static/")>-1){
-        let url = req.url.replace("/static/","")
-        if(url.search('.js')>-1){
-            res.setHeader('Content-Type', 'text/javascript');
-            res.end(fs.readFileSync("app/public/assets/js/"+url))
-        }
-    }
+    routesViews.exe( fs , res , req)
+    routesStatic.exe( fs , res , req , "static" , "app/public")
 });
 
 var io = require('socket.io')(server);
 var sessionList = (v)=>{
-    if(v){
+    if(v != undefined){
         fs.writeFileSync("app/users.json", JSON.stringify(v))
     }
     return JSON.parse(fs.readFileSync("app/users.json"))
@@ -50,7 +44,9 @@ io.on('connection', function(socket){
         }
 
     });
-
+    socket.on("users-list" , function() { 
+        User.sessionList()
+    })
     socket.on('disconnect', function(){
         User.sessionListRemove(socket.id)
     });
@@ -60,6 +56,7 @@ io.on('connection', function(socket){
 class User{
     static sessionListAdd(user, id){
         let temp = sessionList()
+        console.log(temp)
         temp[user] = id
         sessionList(temp)
     }
@@ -77,10 +74,10 @@ class User{
     }
     static login(user){
         io.emit(user, JSON.stringify({action:"online", user}));
-        User.sessionList(user)
     }
     static sessionList(){
         let send = {users:Object.keys(sessionList())}
+        console.log(send)
         io.emit("users", JSON.stringify(send) )
     }
 }
