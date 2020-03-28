@@ -13,21 +13,19 @@ module.exports = class littleChat_UserInstance{
         this.pass = pass
     }
     validation(pass){
-        return 
     }
     encrypt(){
 
     }
     static schema(sequelize, type) {
-            return sequelize.define('user', {
-                id: {
-                  type: type.INTEGER,
-                  primaryKey: true,
-                  autoIncrement: true
-                },
-                name: type.STRING,
-                pass: type.STRING
-            })
-        }
+        return sequelize.define('user', {
+            id: {
+                type: type.INTEGER,
+                primaryKey: true,
+                autoIncrement: true
+            },
+            name: type.STRING,
+            pass: type.STRING
+        })
     }
 }
