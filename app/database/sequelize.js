@@ -1,10 +1,6 @@
     
 module.exports = (models) => {
     const Sequelize = require('sequelize')
-    let modelsResponse = {}
-    for(let model of models){
-        modelsResponse[model] = require(`./models/${model}Instance`).schema()
-    }
 
     var sequelize = new Sequelize('database', 'root', '', {
         host: 'localhost',
@@ -17,15 +13,19 @@ module.exports = (models) => {
         },
     
         // SQLite only
-        storage: './database.sqlite'
+        storage: './database/db.sqlite'
     });
 
-    for(let modelOverride in modelsResponse){
-        modelsResponseOverride[modelOverride] = modelResponse[modelOverride](sequelize, Sequelize)
+    let modelsResponseOverride = {}
+    for(let model of models){
+        let modelInstance = require(`../models/${model}Instance`)
+        let instance = modelInstance.schema(sequelize , Sequelize)
+        modelsResponseOverride[model] = new modelInstance( instance )
     }
 
     sequelize.sync({ force: true }).then(() => {
         console.log(`DB and tables found`)
     })
+    
     return  modelsResponseOverride
 }

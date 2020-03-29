@@ -1,33 +1,36 @@
-module.exports = class littleChat_UserInstance{
-    constructor(){
-        this.mail = ""
+module.exports = class littleChat_userInstance{
+    constructor(model){
+        this.email = ""
         this.pass = ""
-        this.userData = {}
+        this.model = model
+        this.data = {}
     }
-    signup(mail, pass){
-        this.mail = mail
-        this.pass = pass
+    signup( p , then){
+        this.email = p.email
+        this.pass = this.encrypt(p.pass)
+        this.username = p.email.split("@")[0]
+        this.model.create({ email:p.email , pass:p.pass , username:this.username })
+        .then( then( this.email ) )
     }
-    login(mail, pass){
-        this.mail = mail
+    login(email, pass){
+        this.email = email
         this.pass = pass
     }
     validation(pass){
-        return 
     }
-    encrypt(){
-
+    encrypt(pass){
+        return pass
     }
     static schema(sequelize, type) {
-            return sequelize.define('user', {
-                id: {
-                  type: type.INTEGER,
-                  primaryKey: true,
-                  autoIncrement: true
-                },
-                name: type.STRING,
-                pass: type.STRING
-            })
-        }
+        return sequelize.define('user', {
+            id: {
+                type: type.INTEGER,
+                primaryKey: true,
+                autoIncrement: true
+            },
+            username: type.STRING,
+            email: type.STRING,
+            pass: type.STRING
+        })
     }
 }
