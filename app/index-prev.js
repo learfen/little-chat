@@ -6,7 +6,7 @@ fs.writeFileSync("app/users.json" , "{}")
 const mode = "dev"
 const env = JSON.parse(fs.readFileSync("app/env.json"))[mode]
 
-const server = http.createServer((req, res) => {
+const server = http.createServer( (req, res) => {
     res.statusCode = 200;
     routesViews.exe( fs , res , req)
     routesStatic.exe( fs , res , req , "static" , "app/public")
