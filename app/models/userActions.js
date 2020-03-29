@@ -11,27 +11,23 @@ module.exports = class littleChat_userActions{
     }
     routes( req , res ){
         let user = this
-        let url  = req.url.replace("/api/","")
         if(req.method == "POST"){
-            if(url == 'user-signup' || url == 'user-signup/') {
+            if(req.urlApi[0] == 'user') {
+                user.$.signup( req.body , success => res.json(success) )
+            }
+            if(req.urlApi[0] == 'user-login') {
                 user.$.signup( req.body , success => res.json(success) )
             }
         }
         if(req.method == "GET"){
-            if(url == 'users' || url == 'users/'){
+            if(req.urlApi[0] == 'users') {
                 user.$.model.findAll().then( users => res.json(users) )
             }
         }
-        /*
-        
-        ('user-login', (req, res) => {
-            user.$.login( req.body , success => res.json({success}) )
-        })
-        
-        ('user', (req, res) => {
-            user.update( req.body , success => res.json({success}) )
-        })
-
-        */
+        if(req.method == "GET"){
+            if(req.urlApi[0] == 'users') {
+                user.$.model.findAll().then( users => res.json(users) )
+            }
+        }
     }
 }

@@ -21,6 +21,7 @@ const server = http.createServer( (req, res) => {
     const proccessRequest = () =>{
         let urls = req.url.split("/")
         if(urls[1] == "api"){
+            req.urlApi = req.url.replace("/api/","").split("/")
             for(let a of transtactions){
                 a.routes( req , res )
             }

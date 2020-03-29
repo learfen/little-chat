@@ -5,11 +5,10 @@ module.exports = (models) => {
     var sequelize = new Sequelize('database', 'root', '', {
         host: 'localhost',
         dialect: 'sqlite',
-    
         pool: {
-        max: 5,
-        min: 0,
-        idle: 10000
+            max: 5,
+            min: 0,
+            idle: 10000
         },
     
         // SQLite only
@@ -22,8 +21,11 @@ module.exports = (models) => {
         let instance = modelInstance.schema(sequelize , Sequelize)
         modelsResponseOverride[model] = new modelInstance( instance )
     }
-
-    sequelize.sync({ force: true }).then(() => {
+    let options = {}
+    if( !fs.existSync('./database/db.sqlite') ){
+        options = { force: true }
+    }
+    sequelize.sync(options).then(() => {
         console.log(`DB and tables found`)
     })
     
