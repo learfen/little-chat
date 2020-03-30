@@ -24,10 +24,5 @@ module.exports = class littleChat_userActions{
                 user.$.model.findAll().then( users => res.json(users) )
             }
         }
-        if(req.method == "GET"){
-            if(req.urlApi[0] == 'users') {
-                user.$.model.findAll().then( users => res.json(users) )
-            }
-        }
     }
 }

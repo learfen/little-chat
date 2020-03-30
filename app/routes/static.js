@@ -1,10 +1,11 @@
 module.exports = {
-    exe(fs , res , req , url, folder){
-        if(req.url.search(url)>-1){
-            let url = req.url.replace(url,"")
-            if(url.search('.js')>-1){
-                res.setHeader('Content-Type', 'text/javascript');
-                res.end(fs.readFileSync(folder + "/assets/js/"+url))
+    exe(fs , res , req , url, folder , urls){
+        if(urls[2] == "js"){
+            res.setHeader('Content-Type', 'text/javascript');
+            if(urls[3].search("socket.io") > -1){
+                res.end(fs.readFileSync(`node_modules/socket.io-client/dist/`+urls[3]))
+            }else{
+                res.end(fs.readFileSync(`${folder}/assets/js/${urls[3]}`))
             }
         }
     }

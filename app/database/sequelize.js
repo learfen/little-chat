@@ -1,5 +1,5 @@
     
-module.exports = (models) => {
+module.exports = (models , fs) => {
     const Sequelize = require('sequelize')
 
     var sequelize = new Sequelize('database', 'root', '', {
@@ -22,7 +22,7 @@ module.exports = (models) => {
         modelsResponseOverride[model] = new modelInstance( instance )
     }
     let options = {}
-    if( !fs.existSync('./database/db.sqlite') ){
+    if( !fs.existsSync('./database/db.sqlite') ){
         options = { force: true }
     }
     sequelize.sync(options).then(() => {

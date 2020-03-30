@@ -6,7 +6,7 @@ const mode = "dev"
 const env = JSON.parse(fs.readFileSync("app/env.json"))[mode]
 
 const userActions = require("./models/userActions")
-let { user } = require('./database/sequelize')(["user"])
+let { user } = require('./database/sequelize')(["user"] , fs)
 
 let transtactions = [
     new userActions ( user )
@@ -26,8 +26,11 @@ const server = http.createServer( (req, res) => {
                 a.routes( req , res )
             }
         }else{
-            routesViews.exe( fs , res , req , env )
-            routesStatic.exe( fs , res , req , "static" , "app/public")
+            if( routesViews.exe( fs , res , req , env ) ){
+                if(urls[1] == "static"){
+                    routesStatic.exe( fs , res , req , "static" , "app/public" , urls)
+                }
+            }
         }
     }
     if(req.method == "POST"){

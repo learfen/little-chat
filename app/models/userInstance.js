@@ -6,11 +6,15 @@ module.exports = class littleChat_userInstance{
         this.data = {}
     }
     signup( p , then){
-        this.email = p.email
-        this.pass = this.encrypt(p.pass)
-        this.username = p.email.split("@")[0]
-        this.model.create({ email:p.email , pass:p.pass , username:this.username })
-        .then( then( this.email ) )
+        this.model.findOne({email:p.email}).then( r => {
+            if( r == null ){
+                this.email = p.email
+                this.pass = this.encrypt(p.pass)
+                this.username = p.email.split("@")[0]
+                this.model.create({ email:p.email , pass:p.pass , username:this.username })
+                .then( then( this.email ) ) 
+            }   
+        })
     }
     login(email, pass){
         this.email = email
@@ -28,6 +32,7 @@ module.exports = class littleChat_userInstance{
                 primaryKey: true,
                 autoIncrement: true
             },
+            online: type.STRING,
             username: type.STRING,
             email: type.STRING,
             pass: type.STRING
