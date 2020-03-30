@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/learfen/little-chat#readme",
   "dependencies": {
+    "bcrypt-node": "^0.1.0",
     "fs": "0.0.1-security",
     "http": "0.0.0",
     "sequelize": "^5.21.5",

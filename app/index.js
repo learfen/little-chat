@@ -16,7 +16,7 @@ const server = http.createServer( (req, res) => {
     res.statusCode = 200;
     res.json = data =>{
         res.setHeader('Content-Type', 'application/json');
-        res.end( JSON.stringify( { data } ) )
+        res.end( JSON.stringify( data ) )
     }
     const proccessRequest = () =>{
         let urls = req.url.split("/")
@@ -28,7 +28,7 @@ const server = http.createServer( (req, res) => {
         }else{
             if( routesViews.exe( fs , res , req , env ) ){
                 if(urls[1] == "static"){
-                    routesStatic.exe( fs , res , req , "static" , "app/public" , urls)
+                    routesStatic.exe( fs , res , "app/public" , urls)
                 }
             }
         }

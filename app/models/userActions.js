@@ -16,7 +16,7 @@ module.exports = class littleChat_userActions{
                 user.$.signup( req.body , success => res.json(success) )
             }
             if(req.urlApi[0] == 'user-login') {
-                user.$.signup( req.body , success => res.json(success) )
+                user.$.login( req.body , success => res.json(success) )
             }
         }
         if(req.method == "GET"){
