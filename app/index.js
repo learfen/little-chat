@@ -6,10 +6,12 @@ const mode = "dev"
 const env = JSON.parse(fs.readFileSync("app/env.json"))[mode]
 
 const userActions = require("./models/userActions")
-let { user } = require('./database/sequelize')(["user"] , fs)
+const chatActions = require("./models/chatActions")
+let { user , chat } = require('./database/sequelize')(["user","chat"] , fs)
 
 let transtactions = [
-    new userActions ( user )
+    new userActions ( user ) ,
+    new chatActions ( chat )
 ]
 
 const server = http.createServer( (req, res) => {
@@ -33,7 +35,7 @@ const server = http.createServer( (req, res) => {
             }
         }
     }
-    if(req.method == "POST"){
+    if(req.method == "POST" || req.method == "PUT"){
         req.on('data', data => {
             req.body = JSON.parse( data )
             proccessRequest()
@@ -45,5 +47,5 @@ const server = http.createServer( (req, res) => {
 });
 
 server.listen(env.port, env.host, () => {
-    console.log({ env })
+    console.log("Server run ", env )
 });
