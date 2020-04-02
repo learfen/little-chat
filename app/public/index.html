@@ -1,6 +1,76 @@
+<head>
+    <link rel="stylesheet" href="/static/css/index.css">
+    <link rel="stylesheet" href="/static/css/login.css">
+</head>
+<h1>Micro Messenger App</h1>
+<div class="container">
+   <div class="messages">
+      <div class="message">Test Message</div>
+   </div>
+   <div class="input">
+        <div class="emoji-btn"> <span> ;) </span>
+            <div class="emoji-popup"><div class="emoji-wrapper"></div></div>
+        </div>
+        <input type="text" placeholder="Type message here!"/>
+        <div class="btn"> > </div>
+   </div>
+</div>
+<hr>
+<section class="forms-section">
+    <h1 class="section-title">Animated Forms</h1>
+    <div class="forms">
+      <div class="form-wrapper is-active">
+        <button type="button" class="switcher switcher-login">
+          Login
+          <span class="underline"></span>
+        </button>
+        <form class="form form-login">
+          <fieldset>
+            <legend>Please, enter your email and password for login.</legend>
+            <div class="input-block">
+              <label for="login-email">E-mail</label>
+              <input id="login-email" type="email" required>
+            </div>
+            <div class="input-block">
+              <label for="login-password">Password</label>
+              <input id="login-password" type="password" required>
+            </div>
+          </fieldset>
+          <button type="submit" class="btn-login">Login</button>
+        </form>
+      </div>
+      <div class="form-wrapper">
+        <button type="button" class="switcher switcher-signup">
+          Sign Up
+          <span class="underline"></span>
+        </button>
+        <form class="form form-signup">
+          <fieldset>
+            <legend>Please, enter your email, password and password confirmation for sign up.</legend>
+            <div class="input-block">
+              <label for="signup-email">E-mail</label>
+              <input id="signup-email" type="email" required>
+            </div>
+            <div class="input-block">
+              <label for="signup-password">Password</label>
+              <input id="signup-password" type="password" required>
+            </div>
+            <div class="input-block">
+              <label for="signup-password-confirm">Confirm password</label>
+              <input id="signup-password-confirm" type="password" required>
+            </div>
+          </fieldset>
+          <button type="submit" class="btn-signup">Continue</button>
+        </form>
+      </div>
+    </div>
+  </section>
+<hr>
 <h1>Hola mundo</h1>
+<button id="test">test </button>
 <div else="login">
     <input id="user">
+    <input id="pass">
     <button id="login">iniciar sesion </button>
 </div>
 <div style="display:flex"><div if="login" style="width:1rem;height:1rem;background-color:#3c3;border-radius:50%"></div><span if="login" html="user"></span></div>
@@ -13,80 +83,5 @@
 
 <script src="/static/js/socket.io.js"></script>
 <script src="/static/js/dom.js"></script>
-<script>
-
-    (function ($s , Nodo , state) {
-        $d = document
-        let chat = null
-        const socket = {
-            login(){
-                let user = Nodo.get("#user").value
-                if(state.data.login == false){
-                    $s.emit('chat message', JSON.stringify({login:user}));
-                }
-                Chat.launch(user)
-                $s.emit('users-list', "");
-            },
-            error(){
-                $s.on("errorTo" , msg => {
-                    msg = JSON.parse(msg)
-                    if(msg.errorTo == $s.id){
-                        alert(msg.error)
-                    }
-                })
-            }
-        }
-        socket.error()
-
-
-
-        class Chat{
-            static launch(user){
-                if(state.data.login == false){
-                    $s.on(user, Chat.listener);
-                    localStorage.setItem("user" , user)
-                    state.set("user", user)
-                }
-                $s.on("users", Chat.users);
-            }
-            static listener(msgText){
-                let msg = JSON.parse(msgText)
-                if(msg.action){
-                    Chat[msg.action](msg)
-                }
-            }
-            static online(msg){
-                console.log("online : " , msg)
-            }
-            static users(msgText){
-                let msg = JSON.parse(msgText)
-                let users = Nodo.get("#users")
-                users.innerHTML = ""
-                msg.users.splice( msg.users.indexOf(state.data.user), 1)
-                if(msg.users.length){
-                    for(let user of msg.users){
-                        Nodo.push("option", user, users)
-                    }
-                }
-            }
-        }
-        
-        
-        state.instanceDom()
-        
-
-        // revisamos si inicio sesion
-        let temp = localStorage.getItem("user")
-        if(temp != null){
-            Nodo.get("#user", temp)
-            state.set("user", temp)
-            state.set("login",true)
-            socket.login()
-        }
-
-        Nodo.get("#login").addEventListener("click", socket.login );
-                
-    })(io() , Nodo , state);
-
-
-</script>
+<script src="/static/js/login.js"></script>
+<script src="/static/js/index.js"></script>

@@ -5,7 +5,7 @@ module.exports = class littleChat_userActions{
     push( p , then){
         let conversation = [p.to , p.from ]
         conversation.sort()
-        this.$.model.create({ from:p.from , to:p.to , text:p.msg , conversation:conversation.toString() })
+        this.$.model.create({ from:p.from , to:p.to , text:p.text , conversation:conversation.toString() })
         .then( then( { success : true } ) )
     }
     conversations( p , then ){

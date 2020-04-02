@@ -1,0 +1,146 @@
+html, body {
+    padding: 0px;
+    margin: 0px;
+    background:#131417;
+    font-family: 'Karla', sans-serif;
+    color: #FFF;
+  }
+  
+  h1 {
+    text-align: center; 
+  }
+  ::-webkit-scrollbar{ width: 8px}
+  ::-webkit-scrollbar-track { background:rgba(255, 255, 255, 0.1); border-radius:0px 2px 2px 0px;}
+  ::-webkit-scrollbar-thumb { background:rgba(255, 255, 255, 0.5); }
+  .container {
+    margin: 0px;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    max-width: 320px;
+    background: #4772C1;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 3px;
+    animation: flyin 0.75s;
+    position: fixed;
+    bottom: 0;
+    right: 40px;
+    height: 480px;
+  }
+  .container .messages {
+    height: 420px;
+    margin: 5px;
+    background: rgba(0, 0, 0, 0.6);
+    overflow-y: scroll;
+    border-radius: 2px;
+    width: 300px;
+  }
+  .container .messages .message {
+    padding: 5px;
+    animation:fade 0.25s;
+    border-bottom:1px solid rgba(0, 0, 0, 0.1);
+  }
+  .container .input {
+    display: flex;
+    margin: 0px 5px 20px 5px;
+  }
+  .container .input .btn, .container .input .emoji-btn {
+    height: 40px;
+    line-height: 40px;
+    width: 40px;
+    text-align: center;
+    background: #222;
+    border-radius: 0px;
+    margin-left: 0px;
+    position: relative;
+    cursor: pointer;
+  }
+  .container .input .emoji-btn>span{
+    border-radius: 50%;
+    background-color:#ffd569;
+    width: 30px;
+    height: 30px;
+    margin:5px;
+    display: flex;
+    color:#333;
+    justify-content: center;
+    align-items: center;
+    transform: rotate(90deg);
+  }
+  .container .input .btn:hover{
+    background:#333;
+    cursor:pointer;
+  }
+  .container .input input {
+    height: 40px;
+    line-height: 40px;
+    width: 100%;
+    text-align: left;
+    padding: 2px 5px;
+    background: #222;
+    border-radius: 0px;
+    margin-left: 0px;
+    position: relative;
+    color:#fff;
+    border: none;
+  }
+  @keyframes fade{
+    from{ opacity:0;}
+    to{opacity:1;}
+  }
+  @keyframes flyin{
+      from{ transform:translateY(400px); opacity:0;}
+      to{ transform:translateY(0px); opacity:1;}
+  }
+  
+  
+  .emoji-popup{
+     position:absolute;
+     top: -140px;
+     left: 10px;
+     height:130px;
+     width:194px;
+     background:#999;
+     border-radius:2px;
+     text-align:left;
+     overflow-y:auto;
+     opacity:0;
+     pointer-events:none;
+     transition:all 0.25s;
+     box-sizing:border-box;
+  }
+  .emoji-wrapper{
+     overflow:hidden;
+     padding:10px;
+     box-sizing:border-box;
+  }
+  .emoji-popup .emoji-img{
+     margin:auto;
+     width:30px;
+     height:30px;
+     text-align:center;
+     border-radius:5px;
+  }
+  
+  .emoji-popup .emoji-img:hover{
+     background:rgba(0, 0, 0, 0.25);
+  }
+  
+  
+  
+  .emoji-btn:after{
+     content: '';
+     position:absolute;
+     border:10px solid transparent;
+     border-top:10px solid #999;
+     top:-10px;
+     left:30px;
+     transition:all 0.25s;
+     opacity:0;
+  }
+  .emoji-btn.open:after{
+     opacity:1;
+  }
+  .emoji-btn.open .emoji-popup{
+     opacity:1;
+     pointer-events:initial;
+  }
+  

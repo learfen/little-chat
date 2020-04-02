@@ -1,0 +1,92 @@
+<h1>Hola mundo</h1>
+<div else="login">
+    <input id="user">
+    <button id="login">iniciar sesion </button>
+</div>
+<div style="display:flex"><div if="login" style="width:1rem;height:1rem;background-color:#3c3;border-radius:50%"></div><span if="login" html="user"></span></div>
+<div style="display: flex; flex-direction: column;max-width:580px;margin:1rem auto;">
+    <b>Online</b>
+    <select id="users"></select>
+    <textarea rows="6" id="messagge"></textarea>
+    <button>Enviar</button>
+</div>
+
+<script src="/static/js/socket.io.js"></script>
+<script src="/static/js/dom.js"></script>
+<script>
+
+    (function ($s , Nodo , state) {
+        $d = document
+        let chat = null
+        const socket = {
+            login(){
+                let user = Nodo.get("#user").value
+                if(state.data.login == false){
+                    $s.emit('chat message', JSON.stringify({login:user}));
+                }
+                Chat.launch(user)
+                $s.emit('users-list', "");
+            },
+            error(){
+                $s.on("errorTo" , msg => {
+                    msg = JSON.parse(msg)
+                    if(msg.errorTo == $s.id){
+                        alert(msg.error)
+                    }
+                })
+            }
+        }
+        socket.error()
+
+
+
+        class Chat{
+            static launch(user){
+                if(state.data.login == false){
+                    $s.on(user, Chat.listener);
+                    localStorage.setItem("user" , user)
+                    state.set("user", user)
+                }
+                $s.on("users", Chat.users);
+            }
+            static listener(msgText){
+                let msg = JSON.parse(msgText)
+                if(msg.action){
+                    Chat[msg.action](msg)
+                }
+            }
+            static online(msg){
+                console.log("online : " , msg)
+            }
+            static users(msgText){
+                let msg = JSON.parse(msgText)
+                let users = Nodo.get("#users")
+                users.innerHTML = ""
+                msg.users.splice( msg.users.indexOf(state.data.user), 1)
+                if(msg.users.length){
+                    for(let user of msg.users){
+                        Nodo.push("option", user, users)
+                    }
+                }
+            }
+        }
+        
+        
+        state.instanceDom()
+        
+
+        // revisamos si inicio sesion
+        let temp = localStorage.getItem("user")
+        if(temp != null){
+            Nodo.get("#user", temp)
+            state.set("user", temp)
+            state.set("login",true)
+            socket.login()
+        }
+
+        Nodo.get("#login").addEventListener("click", socket.login );
+                
+    })(io() , Nodo , state);
+
+
+</script>

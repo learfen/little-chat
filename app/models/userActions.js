@@ -33,9 +33,6 @@ module.exports = class littleChat_userActions{
                 user.update( req.body , success => res.json(success) )
             }
             if(req.urlApi[0] == 'friends') {
-                if(req.urlApi[1] == 'push') {
-                    user.friendPush( req.body , success => res.json(success) )
-                }
                 if(req.urlApi[1] == 'splice') {
                     user.friendSplice( req.body , success => res.json(success) )
                 }
@@ -47,6 +44,11 @@ module.exports = class littleChat_userActions{
             }
             if(req.urlApi[0] == 'user-login') {
                 user.$.login( req.body , success => res.json(success) )
+            }
+            if(req.urlApi[0] == 'friends') {
+                if(req.urlApi[1] == 'push') {
+                    user.friendPush( req.body , success => res.json(success) )
+                }
             }
         }
         if(req.method == "GET"){

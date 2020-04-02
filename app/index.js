@@ -46,6 +46,33 @@ const server = http.createServer( (req, res) => {
     
 });
 
+
+var io = require('socket.io')(server);
+io.on('connection', function(socket){
+    const res = {
+        json(data){
+            io.emit("chat", JSON.stringify( data ) );
+        }
+    }
+    socket.on('chat-post', function(msgText){
+        let data = JSON.parse(msgText)
+        let req = {method:"POST", url:data.url, body:data.body}
+        req.urlApi = req.url.replace("/api/","").split("/")
+        for(let a of transtactions){
+            a.routes( req , res )
+        }
+    })
+    socket.on('chat-put', function(msgText){
+        let data = JSON.parse(msgText)
+        let req = {method:"PUT", url:data.url, body:data.body}
+        req.urlApi = req.url.replace("/api/","").split("/")
+        for(let a of transtactions){
+            a.routes( req , res )
+        }
+    })
+    
+})
+
 server.listen(env.port, env.host, () => {
     console.log("Server run ", env )
 });
