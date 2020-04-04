@@ -2,8 +2,8 @@
     <link rel="stylesheet" href="/static/css/index.css">
     <link rel="stylesheet" href="/static/css/login.css">
 </head>
-<h1>Micro Messenger App</h1>
 <div class="container">
+  <select id="friends" style="padding:.5rem;width:100%"></select>
    <div class="messages">
       <div class="message">Test Message</div>
    </div>
@@ -15,13 +15,12 @@
         <div class="btn"> > </div>
    </div>
 </div>
-<hr>
 <section class="forms-section">
-    <h1 class="section-title">Animated Forms</h1>
+    <h1 class="section-title">Little Chat</h1>
     <div class="forms">
-      <div class="form-wrapper is-active">
+      <div class="form-wrapper is-active" name="login">
         <button type="button" class="switcher switcher-login">
-          Login
+          Iniciar sesion
           <span class="underline"></span>
         </button>
         <form class="form form-login">
@@ -32,14 +31,14 @@
               <input id="login-email" type="email" required>
             </div>
             <div class="input-block">
-              <label for="login-password">Password</label>
+              <label for="login-password">Contraseña</label>
               <input id="login-password" type="password" required>
             </div>
           </fieldset>
           <button type="submit" class="btn-login">Login</button>
         </form>
       </div>
-      <div class="form-wrapper">
+      <div class="form-wrapper" name="signup">
         <button type="button" class="switcher switcher-signup">
           Sign Up
           <span class="underline"></span>
@@ -64,22 +63,7 @@
         </form>
       </div>
     </div>
-  </section>
-<hr>
-<h1>Hola mundo</h1>
-<button id="test">test </button>
-<div else="login">
-    <input id="user">
-    <input id="pass">
-    <button id="login">iniciar sesion </button>
-</div>
-<div style="display:flex"><div if="login" style="width:1rem;height:1rem;background-color:#3c3;border-radius:50%"></div><span if="login" html="user"></span></div>
-<div style="display: flex; flex-direction: column;max-width:580px;margin:1rem auto;">
-    <b>Online</b>
-    <select id="users"></select>
-    <textarea rows="6" id="messagge"></textarea>
-    <button>Enviar</button>
-</div>
+</section>
 
 <script src="/static/js/socket.io.js"></script>
 <script src="/static/js/dom.js"></script>

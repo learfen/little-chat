@@ -10,7 +10,9 @@ module.exports = class littleChat_userActions{
     friendPush( p , then ){
         this.$.model.findOne({where:{id:p.user}}).then( (user) => {
             user.friends = user.friends == null ? "" : user.friends
-            user.friends += p.friend + ","
+            if(user.friends.search(p.friend + ",") == -1){
+                user.friends += p.friend + ","
+            }
             this.$.model.update( { friends: user.friends } , {where:{id:p.user}})
             then( {success:true} )
         });

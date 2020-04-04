@@ -1,6 +1,7 @@
+var $d = document
 class Nodo{
     static get(q,v){
-        let n = document.querySelector(q)
+        let n = $d.querySelector(q)
         if(v){
             let nodeName = n.nodeName.toLowerCase()
             if(nodeName == 'input' || nodeName == 'textarea' || nodeName == 'select'){
@@ -14,7 +15,7 @@ class Nodo{
         } 
         return n
     }
-    static getList(q){ return document.querySelectorAll(q) }
+    static getList(q){ return $d.querySelectorAll(q) }
     static push(name, html, pushIn){
         let nodo = $d.createElement(name)
         if(pushIn){

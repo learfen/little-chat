@@ -16,7 +16,7 @@ module.exports = class littleChat_userInstance{
     login( p , then ){
         this.model.findOne({email:p.email}).then( r => {
             if( r != null ){
-                then( { success:this.bcrypt.compareSync(p.pass, r.dataValues.pass) })
+                then( { success:this.bcrypt.compareSync(p.pass, r.dataValues.pass) , data:r })
             }else{
                 then( { success:"Usuario no encontrado" } )
             }
