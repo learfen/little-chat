@@ -66,7 +66,7 @@ let state = {
         if(this.dom.if.hasOwnProperty(k)){
             for(let a of this.dom.if[k]){
                 if(this.data[k]){
-                    a.style.display = "block"
+                    a.style.display = a.getAttribute("display") ? a.getAttribute("display") : "block" 
                 }else{
                     a.style.display = "none"
                 }
@@ -77,7 +77,7 @@ let state = {
                 if(this.data[k]){
                     a.style.display = "none"
                 }else{
-                    a.style.display = "block"
+                    a.style.display = a.getAttribute("display") ? a.getAttribute("display") : "block" 
                 }
             }
         }

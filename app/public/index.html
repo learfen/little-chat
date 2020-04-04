@@ -2,7 +2,7 @@
     <link rel="stylesheet" href="/static/css/index.css">
     <link rel="stylesheet" href="/static/css/login.css">
 </head>
-<div class="container">
+<div class="container" if="login">
   <select id="friends" style="padding:.5rem;width:100%"></select>
    <div class="messages">
       <div class="message">Test Message</div>
@@ -15,9 +15,9 @@
         <div class="btn"> > </div>
    </div>
 </div>
-<section class="forms-section">
+<section class="forms-section" >
     <h1 class="section-title">Little Chat</h1>
-    <div class="forms">
+    <div class="forms"  else="login" display="flex">
       <div class="form-wrapper is-active" name="login">
         <button type="button" class="switcher switcher-login">
           Iniciar sesion

@@ -24,9 +24,30 @@ class User{
 						}
 						chatLaunch( io() , Nodo , state , msg.data , email)
 					}
+					console.log(msg)
+				}
+				if(msg.error){
+					alert(msg.error)
 				}
 			} )
 	   });
+	}
+	static signup(body , email){
+		if(Nodo.get("#signup-password-confirm").value == body.pass){
+			fetch("/api/user" , {
+				method:"POST",
+				body:JSON.stringify(body),
+				headers:{
+					'Content-Type': 'application/json'
+				}
+			}).then( resp => {
+				resp.json().then( msg => {
+					if(msg.success){
+						if(msg.data){ chatLaunch( io() , Nodo , state , msg.data , email) }
+					}
+				} )
+			});
+		}
 	}
 }
  
